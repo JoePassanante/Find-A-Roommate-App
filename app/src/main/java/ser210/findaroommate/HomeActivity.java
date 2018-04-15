@@ -113,13 +113,13 @@ public class HomeActivity extends Activity {
 
     //set the screen title
     private void setActionBarTitle(int position){
-        String title;
+        String title = "";
         if(position == 0){
             title = getResources().getString(R.string.app_name);
         } else {
             title = _titles[position - 1];
         }
-        getActionBar().setTitle("FUCK");
+        getActionBar().setTitle(title);
     }
 
     private void performOtherAction(){
