@@ -1,8 +1,8 @@
 package ser210.findaroommate;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.text.TextUtils;
@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import ser210.findaroommate.Support.PublicDBHelper;
 
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener {
     private TextView mStatusTextView;
     private TextView mDetailTextView;
     private EditText mEmailField;
