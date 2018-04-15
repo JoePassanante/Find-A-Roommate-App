@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "450265403038",
+    "firebase_url": "https://ser210-find-a-roommate.firebaseio.com",
+    "project_id": "ser210-find-a-roommate",
+    "storage_bucket": "ser210-find-a-roommate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:450265403038:android:0acc573810b4884c",
+        "android_client_info": {
+          "package_name": "ser210.findaroommate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "450265403038-crhmek0s9ruovt1s23n8hp5s9ts3pph7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ser210.findaroommate",
+            "certificate_hash": "8a30d1d48be07b8bcbcec3e56d93cf3a0322fd3e"
+          }
+        },
+        {
+          "client_id": "450265403038-hcdpl102htb7aovnvu2d1p44iircsn8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPK1sHPNSzOaJ5EcegJioS42V6yaCjFbs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "450265403038-hcdpl102htb7aovnvu2d1p44iircsn8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
