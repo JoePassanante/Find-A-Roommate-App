@@ -1,11 +1,38 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ser210.findaroommate.Fragments.BrowseFragment"
     android:orientation="horizontal">
 
-    <!-- TODO: Update blank fragment layout -->
+
+    <ImageButton
+        android:id="@+id/leftButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:src="@drawable/ic_chevron_left_black_24dp"
+        />
+
+
+    <FrameLayout
+        android:id="@+id/profile_frame"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="8">
+
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/rightButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        android:src="@drawable/ic_chevron_right_black_24dp"
+        />
+
 
 </LinearLayout>
