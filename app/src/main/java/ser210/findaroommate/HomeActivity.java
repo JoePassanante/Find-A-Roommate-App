@@ -119,7 +119,7 @@ public class HomeActivity extends Activity {
         } else {
             title = _titles[position - 1];
         }
-        getActionBar().setTitle("FUCK");
+        getActionBar().setTitle(title);
     }
 
     private void performOtherAction(){
