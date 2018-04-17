@@ -52,6 +52,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         //Initialize Firebase Auth.
         mAuth = FirebaseAuth.getInstance();
+
+        //Signout past User
+        this.signOut();
     }
 
     @Override
@@ -145,7 +148,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         }
 
                         if (!task.isSuccessful()) {
-                            mStatusTextView.setText("Failed");
+                            mStatusTextView.setText("Failed!");
                         }
                     }
                 });
