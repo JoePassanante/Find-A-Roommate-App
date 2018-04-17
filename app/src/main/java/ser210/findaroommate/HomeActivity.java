@@ -94,6 +94,11 @@ public class HomeActivity extends Activity {
                 fragment = new MatchesFragment();
                 item.setTitle("Edit");
                 item.setVisible(true);
+
+                //--GET LIST OF MATCHES FROM LOCAL DATABASE--//
+                //pass as an array list through bundle and arguments
+                //and give it to the matches fragment
+
                 break;
             default: //default home
                 fragment = new HomeFragment();
