@@ -1,5 +1,9 @@
 package ser210.findaroommate.Models;
 
+import android.graphics.Bitmap;
+
+import java.util.ArrayList;
+
 /**
  * Created by Joe Passanante on 4/12/2018.
  */
@@ -9,13 +13,30 @@ public class User {
     private String phoneNumber = "";
     private String housingPref = "";
     private int partyPreference = 0; //0-5 0 is low, 5 is high
+  //  private ArrayList<String> profileImage = null;
 
     //required for Auth.
     private String uid = "";
     private String email = "";
+/*
+    public ArrayList<String> getProfileImage() {
+        return profileImage;
+    }
 
+    public void setProfileImage(ArrayList<String> profileImage) {
+        this.profileImage = profileImage;
+    }
+*/
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public int getPartyPreference() {
+        return partyPreference;
+    }
+
+    public void setPartyPreference(int partyPreference) {
+        this.partyPreference = partyPreference;
     }
 
     public User(String email, String uid) {

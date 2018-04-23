@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "450265403038-cjvhbnsqoesq93aqqfvvpch0fa25acuh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ser210.findaroommate",
+            "certificate_hash": "d979e5a6728eedd8f764dffc6353ba8abfaea4a1"
+          }
+        },
+        {
           "client_id": "450265403038-crhmek0s9ruovt1s23n8hp5s9ts3pph7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

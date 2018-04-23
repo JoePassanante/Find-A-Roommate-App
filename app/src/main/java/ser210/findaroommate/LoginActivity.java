@@ -18,6 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ser210.findaroommate.Models.User;
 import ser210.findaroommate.Support.PublicDBHelper;
 
 
@@ -265,7 +266,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         //We use a callBack interface for this as we don't know how long it will take for the publicDBHelper to pull all users and check their properties.
         publicDB.findUser(mAuth.getCurrentUser().getUid(), new PublicDBHelper.findUserCallback() {
             @Override
-            public void findUserCallBack(boolean b) {
+            public void findUserCallBack(boolean b, User user) { //We will not be using User in this case.
                 if(!b){
                     publicDB.setNewAuthUser(mAuth.getCurrentUser());
                     Log.i("NextScreen","User: " + mAuth.getCurrentUser().getEmail() + " was just created!");
