@@ -20,6 +20,10 @@ import ser210.findaroommate.Models.User;
 
  */
 public class PublicDBHelper {
+    final public static String USER_LIST = "UserList";
+    final public static String MATCH_PENDING_LIST = "MatchesPending";
+    final public static String MAtCH_COMPLETED_LIST = "MatchesComplete";
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference();
 
@@ -27,7 +31,7 @@ public class PublicDBHelper {
     public boolean setNewUser(User user){
         if(user==null || user.getUid()==null || user.getUid().isEmpty())
             return false;
-        myRef.child("UserList").child(user.getUid()).setValue(user);
+        myRef.child(USER_LIST).child(user.getUid()).setValue(user);
 
         return true;
     }
@@ -40,7 +44,7 @@ public class PublicDBHelper {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild("UserList") && dataSnapshot.child("UserList").hasChild(uid)){
+                if(dataSnapshot.hasChild(USER_LIST) && dataSnapshot.child(USER_LIST).hasChild(uid)){
                    CB.findUserCallBack(true);
                 }
             }

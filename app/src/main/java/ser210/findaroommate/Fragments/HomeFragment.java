@@ -34,9 +34,9 @@ public class HomeFragment extends Fragment {
 
         //--TEMPORARY NOTIFICATIONS LIST--//
         _notifications = new ArrayList<String>();
-        _notifications.add("Notifications");
-        _notifications.add("For the");
-        _notifications.add("User");
+        _notifications.add("John Smith has matched you! ");
+        _notifications.add("Jimmy Neutron is looking to hang out!");
+        _notifications.add("Sally no longer wants to be your friend!");
 
         //populate List View
         _notificationsList = v.findViewById(R.id.notification_list);

@@ -100,7 +100,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("createAccount", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                      //      updateUI(user);
                             //go to main app screen
                             nextScreen();
                         } else {
@@ -136,7 +136,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("signIn", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                       //     updateUI(user);
                             //go to main app screen
                             nextScreen();
                         } else {
@@ -259,8 +259,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
       //      return;
 
         //create the next intent, we do this outside of the callback class so we can acquire the current context.
-        final Intent intent = new Intent(this, ser210.findaroommate.HomeActivity.class);
-
+        final Intent homeintent = new Intent(this, ser210.findaroommate.HomeActivity.class);
+        final Intent newintent = new Intent(this, ser210.findaroommate.CreateNewUser.class);
         //check to see if the user exists in the database
         //We use a callBack interface for this as we don't know how long it will take for the publicDBHelper to pull all users and check their properties.
         publicDB.findUser(mAuth.getCurrentUser().getUid(), new PublicDBHelper.findUserCallback() {
@@ -269,13 +269,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 if(!b){
                     publicDB.setNewAuthUser(mAuth.getCurrentUser());
                     Log.i("NextScreen","User: " + mAuth.getCurrentUser().getEmail() + " was just created!");
-
+                    startActivity(newintent);
+                    finish(); //prevent from going back to this screen.
                 }else{
                     Log.i("NextScreen","User: " + mAuth.getCurrentUser().getEmail() + " exists in our database.");
+                    startActivity(homeintent);
+                    //we don't want them going back to the login screen.
+                    finish();
                 }
-                startActivity(intent);
-                //we don't want them going back to the login screen.
-                finish();
             }
         });
     }

@@ -24,7 +24,6 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
         //variables
         _titles = getResources().getStringArray(R.array.titles);
     }
