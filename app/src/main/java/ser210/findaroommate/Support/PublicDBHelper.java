@@ -2,9 +2,11 @@ package ser210.findaroommate.Support;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -59,15 +61,26 @@ public class PublicDBHelper {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("Find User","User List Exists" + String.valueOf(dataSnapshot.hasChild(USER_LIST)));
+                Log.i("Find User","User List" + uid + " Exists" + String.valueOf(dataSnapshot.child(USER_LIST).hasChild(uid)));
                 if (dataSnapshot.hasChild(USER_LIST) && dataSnapshot.child(USER_LIST).hasChild(uid)) {
                     User user = dataSnapshot.getValue(User.class);
                     CB.findUserCallBack(true, user);
+                    Log.i("Find User","User: " + uid + " Has been found");
+                }else{
+                    CB.findUserCallBack(false,null);
+                    Log.i("Find User","User: " + uid + " Has not been found1");
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 CB.findUserCallBack(false, null);
+                Log.i("Find User","User: " + uid + " Has not been found2");
+                Log.i("Find User","Auth: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+                Log.i("Find User", "ERROR " + String.valueOf(databaseError.getCode()));
+                Log.i("Find User", "ERROR " + String.valueOf(databaseError.getMessage()));
+                Log.i("Find User", "ERROR " + String.valueOf(databaseError.getDetails()));
             }
         });
     }
