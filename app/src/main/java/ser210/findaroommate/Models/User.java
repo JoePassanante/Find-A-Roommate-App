@@ -1,5 +1,9 @@
 package ser210.findaroommate.Models;
 
+import android.graphics.Bitmap;
+
+import java.util.ArrayList;
+
 /**
  * Created by Joe Passanante on 4/12/2018.
  */
@@ -13,9 +17,16 @@ public class User {
     //required for Auth.
     private String uid = "";
     private String email = "";
-
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public int getPartyPreference() {
+        return partyPreference;
+    }
+
+    public void setPartyPreference(int partyPreference) {
+        this.partyPreference = partyPreference;
     }
 
     public User(String email, String uid) {

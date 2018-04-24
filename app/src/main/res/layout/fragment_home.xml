@@ -10,9 +10,9 @@
 
     <ImageView
         android:id="@+id/background_image"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="150dp"
-        android:src="@drawable/ic_launcher_background" />
+        android:src="@drawable/roommatepicture" />
 
     <TextView
         android:id="@+id/noteText"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/background_image"
         android:text="Notifications"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:textAppearance="@style/ThemeOverlay.MyTitleText" />
 
     <ListView
         android:id="@+id/notification_list"

@@ -8,30 +8,56 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import ser210.findaroommate.Fragments.BrowseFragment;
 import ser210.findaroommate.Fragments.HomeFragment;
 import ser210.findaroommate.Fragments.MatchesFragment;
 import ser210.findaroommate.Fragments.MyProfileFragment;
+import ser210.findaroommate.Models.User;
+import ser210.findaroommate.Support.PublicDBHelper;
 
 public class HomeActivity extends Activity {
     private int _currentPosition = 0;
     private String[] _titles;
     private Menu _menu;
     private Fragment _visibleFragment;
+    private User me;
+    private PublicDBHelper publicDB;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
         //variables
         _titles = getResources().getStringArray(R.array.titles);
+
+        //Initialize database helper.
+        publicDB = new PublicDBHelper();
+
+        //Initialize Firebase Auth.
+        mAuth = FirebaseAuth.getInstance();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        publicDB.findUser(mAuth.getCurrentUser().getUid(), new PublicDBHelper.findUserCallback() {
+            @Override
+            public void findUserCallBack(boolean b, User user) {
+                setUser(user);
+            }
+        });
+    }
+
+    private void setUser(User user) {
+        this.me = user;
+    }
 
     //inflate action bar
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         _menu = menu;
         getMenuInflater().inflate(R.menu.main_menu, menu);
         selectItem(_currentPosition);
@@ -40,8 +66,8 @@ public class HomeActivity extends Activity {
 
 
     //dealing with selected Item from menu
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.action_home:
 
                 selectItem(0);
@@ -70,12 +96,12 @@ public class HomeActivity extends Activity {
     }
 
     //deal with selected item
-    private void selectItem(int position){
+    private void selectItem(int position) {
         Fragment fragment;
         MenuItem item = _menu.findItem(R.id.action_other);
 
 
-        switch(position){
+        switch (position) {
             case 0: //HOME
                 item.setVisible(false);
                 fragment = new HomeFragment();
@@ -117,9 +143,9 @@ public class HomeActivity extends Activity {
     }
 
     //set the screen title
-    private void setActionBarTitle(int position){
+    private void setActionBarTitle(int position) {
         String title = "";
-        if(position == 0){
+        if (position == 0) {
             title = getResources().getString(R.string.app_name);
         } else {
             title = _titles[position - 1];
@@ -127,22 +153,21 @@ public class HomeActivity extends Activity {
         getActionBar().setTitle(title);
     }
 
-    private void performOtherAction(){
-        if(_visibleFragment instanceof MyProfileFragment){
+    private void performOtherAction() {
+        if (_visibleFragment instanceof MyProfileFragment) {
             //--CODE FOR EDITING MY PROFILE--//
         }
 
-        if(_visibleFragment instanceof BrowseFragment){
+        if (_visibleFragment instanceof BrowseFragment) {
             //--CODE FOR CONTACTING THE CURRENT PICKED USER--//
         }
 
-        if(_visibleFragment instanceof MatchesFragment){
+        if (_visibleFragment instanceof MatchesFragment) {
             //CODE FOR EDITING MATCHES--//
         }
 
 
     }
-
 
 
 }
