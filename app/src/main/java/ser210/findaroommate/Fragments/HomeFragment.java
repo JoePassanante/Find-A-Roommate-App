@@ -25,7 +25,7 @@ import ser210.findaroommate.Support.PublicDBHelper;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements PublicDBHelper.getUserImageFileCallBack {
+public class HomeFragment extends Fragment {
     ListView _notificationsList;
     ArrayList<String> _notifications;
 
@@ -34,20 +34,21 @@ public class HomeFragment extends Fragment implements PublicDBHelper.getUserImag
     }
 
     @Override
-    public void Result(boolean result, File file, Uri Uri, FileDownloadTask.TaskSnapshot taskSnapshot) {
-        if(this.getView()==null){
-            Log.e("HomeFragment","Failed to get view");
-            return;
-        }
-        ((ImageView)this.getView().findViewById(R.id.background_image)).setImageURI(Uri);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+
         //Change home image to profile picture for demo
-        new PublicDBHelper().getUserFile(FirebaseAuth.getInstance().getCurrentUser().getUid(),this);
+        new PublicDBHelper().getUserFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), new PublicDBHelper.getUserImageFileCallBack() {
+            @Override
+            public void Result(boolean result, File file, Uri uri, FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    if(getView()==null){
+                        Log.e("HomeFragment","Failed to get view");
+                        return;
+                    }
+                    ((ImageView)getView().findViewById(R.id.background_image)).setImageURI(uri);
+                }
+        });
 
 
         //--TEMPORARY NOTIFICATIONS LIST--//

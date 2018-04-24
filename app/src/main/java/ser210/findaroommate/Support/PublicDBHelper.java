@@ -84,7 +84,7 @@ public class PublicDBHelper {
 
     //uploadImages
     public static boolean uploadImage(String UID, Uri uri) {
-        StorageReference targetRef = storageRef.child(UID);
+        StorageReference targetRef = storageRef.child("UserProfileImages/"+UID);
         UploadTask uploadTask = targetRef.putFile(uri);
 
         // Register observers to listen for when the download is done or if it fails
@@ -110,7 +110,7 @@ public class PublicDBHelper {
     public void getUserFile(String UID, final getUserImageFileCallBack CB){
         try{
             final File localFile = File.createTempFile(UID, "jpg");
-            StorageReference targetRef = storageRef.child(UID);
+            StorageReference targetRef = storageRef.child("UserProfileImages/"+UID);
             targetRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
