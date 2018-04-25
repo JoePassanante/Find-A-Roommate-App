@@ -40,6 +40,7 @@ public class LocalDBHelper {
             Log.e("Database Error","Database not found! Did you open the connection?");
             return;
         }
+        this.removeAllUsers();
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.COLUMN_EMAIL,email);
         values.put(MySQLiteHelper.COLUMN_PASSWORD,password);

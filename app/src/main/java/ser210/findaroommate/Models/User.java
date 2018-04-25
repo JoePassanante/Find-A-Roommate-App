@@ -13,10 +13,12 @@ public class User {
     private String phoneNumber = "";
     private String housingPref = "";
     private int partyPreference = 0; //0-5 0 is low, 5 is high
+    private String description = "";
 
     //required for Auth.
     private String uid = "";
     private String email = "";
+
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
@@ -35,6 +37,15 @@ public class User {
     }
 
     //Setters and Getters
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setUid(String s) {
         this.uid = s;
     }

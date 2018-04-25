@@ -102,12 +102,31 @@
                 android:hint="@string/phonenumber"
                 android:inputType="text" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/DescLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/phoneNumberLayout"
+            android:background="@color/grey_300"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp">
 
+            <EditText
+                android:id="@+id/DescField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/descriptionfield"
+                android:inputType="textMultiLine" />
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/partySpinnerHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/phoneNumberLayout"
+            android:layout_below="@+id/DescLayout"
             android:background="@color/grey_300"
             android:orientation="horizontal"
             android:paddingBottom="8dp"
@@ -135,12 +154,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/partySpinnerHolder"
             android:background="@color/grey_300"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:paddingBottom="8dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="8dp">
-
+            <ImageView
+                android:id="@+id/profileImageDemo"
+                android:layout_width="wrap_content"
+                android:contentDescription="@string/upload_image"
+                android:src="@drawable/placeholder"
+                android:layout_gravity="center"
+                android:layout_height="150dp" />
             <Button
                 android:id="@+id/uploadImage"
                 style="@style/Widget.AppCompat.Button.Colored"
