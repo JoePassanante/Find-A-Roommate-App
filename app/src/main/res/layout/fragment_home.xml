@@ -12,6 +12,7 @@
         android:id="@+id/background_image"
         android:layout_width="wrap_content"
         android:layout_height="150dp"
+        android:layout_gravity="center"
         android:src="@drawable/roommatepicture" />
 
     <TextView

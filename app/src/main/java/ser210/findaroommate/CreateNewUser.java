@@ -47,6 +47,7 @@ public class CreateNewUser extends Activity {
             Uri uri = data.getData();
             String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
             PublicDBHelper.uploadImage(UID,uri);
+            ((ImageView)findViewById(R.id.profileImageDemo)).setImageURI(uri);
         }
     }
 
