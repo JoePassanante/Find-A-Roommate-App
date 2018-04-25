@@ -13,6 +13,7 @@ public class User {
     private String phoneNumber = "";
     private String housingPref = "";
     private int partyPreference = 0; //0-5 0 is low, 5 is high
+    private String description = "";
 
     //required for Auth.
     private String uid = "";
@@ -85,5 +86,9 @@ public class User {
 
     public String toString() {
         return this.getFirstName() + this.getLastName();
+    }
+
+    public String getDescription(){
+        return description;
     }
 }
