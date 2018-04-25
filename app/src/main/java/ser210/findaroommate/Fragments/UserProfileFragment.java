@@ -6,11 +6,17 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
+import ser210.findaroommate.Models.User;
 import ser210.findaroommate.R;
+import ser210.findaroommate.Support.PublicDBHelper;
 
 
 /**
@@ -22,7 +28,15 @@ public class UserProfileFragment extends Fragment {
     //where is messy vs neat or late vs early?
     TextView _nameText;
     TextView _housingText;
-    TextView _emailText;
+    TextView _partyText;
+    TextView _descriptionText;
+    TextView _phoneText;
+
+    String name = " ";
+    String housing = " ";
+    int party = 0;
+    String description = " ";
+    String phone = " ";
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -37,11 +51,24 @@ public class UserProfileFragment extends Fragment {
         //--ANY VARIABLES YOU ADD WILL NEED TO BE GOTTEN HERE FOR ACCESS--//
         _nameText = (TextView) v.findViewById(R.id.nameText);
         _housingText = (TextView) v.findViewById(R.id.housingText);
+        _partyText = (TextView) v.findViewById(R.id.partyText);
+        _descriptionText = (TextView) v.findViewById(R.id.descriptionText);
+        _phoneText = (TextView) v.findViewById(R.id.phoneText);
 
+
+        Bundle args = getArguments();
+        name = args.getString("name");
+        housing = args.getString("housing");
+        party = args.getInt("party");
+        //description = args.getString("description");
+        phone = args.getString("phone");
 
         //--TEMPORATY VARIABLES SET WILL NEED TO SET THESE TO WHAT YOU GET FROM DATABASE--//
-        _nameText.setText("Mary Sue"); //change to first name + " " + last name
-        _housingText.setText("Cresent");
+        _nameText.setText(name); //change to first name + " " + last name
+        _housingText.setText("Loading");
+        _partyText.setText("Loading");
+        _descriptionText.setText("Loading");
+        _phoneText.setText("Loading");
 
 
 

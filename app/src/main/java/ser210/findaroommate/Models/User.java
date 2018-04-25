@@ -97,4 +97,8 @@ public class User {
     public String toString() {
         return this.getFirstName() + this.getLastName();
     }
+
+    public String getDescription(){
+        return description;
+    }
 }
