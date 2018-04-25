@@ -29,11 +29,14 @@ public class UserProfileFragment extends Fragment {
     TextView _nameText;
     TextView _housingText;
     TextView _partyText;
-    MultiAutoCompleteTextView _descriptionText;
+    TextView _descriptionText;
     TextView _phoneText;
 
-    PublicDBHelper publicDB;
-    FirebaseAuth mAuth;
+    String name = " ";
+    String housing = " ";
+    int party = 0;
+    String description = " ";
+    String phone = " ";
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -49,34 +52,25 @@ public class UserProfileFragment extends Fragment {
         _nameText = (TextView) v.findViewById(R.id.nameText);
         _housingText = (TextView) v.findViewById(R.id.housingText);
         _partyText = (TextView) v.findViewById(R.id.partyText);
-        _descriptionText = (MultiAutoCompleteTextView) v.findViewById(R.id.descriptionText);
+        _descriptionText = (TextView) v.findViewById(R.id.descriptionText);
         _phoneText = (TextView) v.findViewById(R.id.phoneText);
 
-        //Initialize database helper.
-        publicDB = new PublicDBHelper();
 
-        //Initialize Firebase Auth.
-        mAuth = FirebaseAuth.getInstance();
-
+        Bundle args = getArguments();
+        name = args.getString("name");
+        housing = args.getString("housing");
+        party = args.getInt("party");
+        //description = args.getString("description");
+        phone = args.getString("phone");
 
         //--TEMPORATY VARIABLES SET WILL NEED TO SET THESE TO WHAT YOU GET FROM DATABASE--//
-        _nameText.setText("Loading"); //change to first name + " " + last name
+        _nameText.setText(name); //change to first name + " " + last name
         _housingText.setText("Loading");
         _partyText.setText("Loading");
-        //_descriptionText.setText("Loading");
+        _descriptionText.setText("Loading");
         _phoneText.setText("Loading");
 
-        //get from database and put it in
-        publicDB.findUser(mAuth.getCurrentUser().getUid(), new PublicDBHelper.findUserCallback() {
-            @Override
-            public void findUserCallBack(boolean b, User user) {
-           String name = user.getFirstName() + " " + user.getLastName();
-            //_nameText.setText(name);
-            //_housingText.setText(user.getHousingPref());
-            //_partyText.setText(user.getPartyPreference());
-            //_phoneText.setText(user.getPhoneNumber());
-            }
-        });
+
 
 
         return v;

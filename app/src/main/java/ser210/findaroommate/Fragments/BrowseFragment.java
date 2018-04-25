@@ -12,8 +12,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import ser210.findaroommate.Models.User;
 import ser210.findaroommate.R;
+import ser210.findaroommate.Support.PublicDBHelper;
 
 
 /**
@@ -24,6 +27,14 @@ public class BrowseFragment extends Fragment implements View.OnClickListener{
     ImageButton _leftButton;
     ImageButton _rightButton;
     FrameLayout _profileFrame;
+    FirebaseAuth mAuth;
+    PublicDBHelper publicDB;
+
+    String _userName;
+    String _userHousing;
+    int _userParty;
+    String _userDescription;
+    String _userPhone;
 
     public BrowseFragment() {
         // Required empty public constructor
@@ -42,12 +53,41 @@ public class BrowseFragment extends Fragment implements View.OnClickListener{
         _rightButton.setOnClickListener(this);
         _profileFrame = (FrameLayout) _v.findViewById(R.id.profile_frame);
 
+        mAuth = FirebaseAuth.getInstance();
+        publicDB = new PublicDBHelper();
+
+
         //--GET FIRST USER FROM DATABASE AND PUT INTO NEW FRAGMENT--//
-        Fragment firstProfile = new UserProfileFragment();
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(_profileFrame.getId(), firstProfile);
-        ft.commit();
+        publicDB.findUser(mAuth.getCurrentUser().getUid(), new PublicDBHelper.findUserCallback() {
+            @Override
+            public void findUserCallBack(boolean b, User user) {
+                _userName = user.getFirstName() + " " + user.getLastName();
+                _userHousing = user.getHousingPref();
+                _userParty = user.getPartyPreference();
+                //_userDescription = user.getDescription(); description not implemented yet
+                _userPhone = user.getPhoneNumber();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("name", _userName);
+                bundle.putString("housing", _userHousing);
+                bundle.putInt("party", _userParty);
+                //bundle.putString("description", _userDescription);
+                bundle.putString("phone", _userPhone);
+
+
+                Fragment firstProfile = new UserProfileFragment();
+                firstProfile.setArguments(bundle);
+
+
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(_profileFrame.getId(), firstProfile);
+                ft.commit();
+
+            }
+        });
+
+
 
 
         return _v;
@@ -78,7 +118,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener{
         Fragment profileFrag = new UserProfileFragment();
         Bundle bundle = new Bundle();
         //--PUT NEW USER INTO BUNDLE--//
-        //array list of stuff?
+        //look at the on create code
 
         profileFrag.setArguments(bundle);
         //replace it
