@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -105,6 +106,8 @@ public class HomeActivity extends Activity {
             case 0: //HOME
                 item.setVisible(false);
                 fragment = new HomeFragment();
+                item.setTitle("Log Out");
+                item.setVisible(true);
                 break;
             case 1: //MY PROFILE
                 fragment = new MyProfileFragment();
@@ -129,6 +132,8 @@ public class HomeActivity extends Activity {
             default: //default home
                 fragment = new HomeFragment();
                 item.setVisible(false);
+                item.setTitle("Log Out");
+                item.setVisible(true);
         }
 
         _visibleFragment = fragment;
@@ -164,6 +169,13 @@ public class HomeActivity extends Activity {
 
         if (_visibleFragment instanceof MatchesFragment) {
             //CODE FOR EDITING MATCHES--//
+        }
+        //if we are home.. than we probably want to be able to log out!
+        if (_visibleFragment instanceof  HomeFragment){
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this, ser210.findaroommate.LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
 
 
