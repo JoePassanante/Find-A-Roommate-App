@@ -98,7 +98,4 @@ public class User {
         return this.getFirstName() + this.getLastName();
     }
 
-    public String getDescription(){
-        return description;
-    }
 }

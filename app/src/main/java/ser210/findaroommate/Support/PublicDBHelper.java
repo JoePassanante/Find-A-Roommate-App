@@ -20,7 +20,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URI;
+import java.util.ArrayList;
 
 import ser210.findaroommate.Models.User;
 
@@ -64,9 +66,9 @@ public class PublicDBHelper {
                 Log.i("Find User","User List Exists" + String.valueOf(dataSnapshot.hasChild(USER_LIST)));
                 Log.i("Find User","User List" + uid + " Exists" + String.valueOf(dataSnapshot.child(USER_LIST).hasChild(uid)));
                 if (dataSnapshot.hasChild(USER_LIST) && dataSnapshot.child(USER_LIST).hasChild(uid)) {
-                    User user = dataSnapshot.getValue(User.class);
+                    User user = dataSnapshot.child(USER_LIST).child(uid).getValue(User.class);
                     CB.findUserCallBack(true, user);
-                    Log.i("Find User","User: " + uid + " Has been found");
+                    Log.i("Find User","User: " + user.getUid() + " Has been found");
                 }else{
                     CB.findUserCallBack(false,null);
                     Log.i("Find User","User: " + uid + " Has not been found1");
@@ -84,6 +86,31 @@ public class PublicDBHelper {
             }
         });
     }
+    //
+    public static interface userIDListCallback{
+        void userIDListCallback(ArrayList<String> UIDS, ArrayList<User> UserList);
+    }
+    public void getListofUsers(final userIDListCallback CB){
+        myRef.child(PublicDBHelper.USER_LIST).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<String>UIDList = new ArrayList<String>();
+                ArrayList<User>UserList = new ArrayList<User>();
+                for(DataSnapshot childSnapshot: dataSnapshot.getChildren()){
+                    UIDList.add(childSnapshot.getKey());
+                    UserList.add(childSnapshot.getValue(User.class));
+                }
+                CB.userIDListCallback(UIDList,UserList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 
     //Add new Firebase User
     public boolean setNewAuthUser(FirebaseUser user) {
@@ -120,7 +147,7 @@ public class PublicDBHelper {
         void Result(boolean result,File file, Uri uri, FileDownloadTask.TaskSnapshot taskSnapshot);
     }
 
-    public void getUserFile(String UID, final getUserImageFileCallBack CB){
+    public void getUserImage(String UID, final getUserImageFileCallBack CB){
         try{
             final File localFile = File.createTempFile(UID, "jpg");
             StorageReference targetRef = storageRef.child("UserProfileImages/"+UID);
@@ -132,7 +159,7 @@ public class PublicDBHelper {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    CB.Result(false,null,null, null);
+                    loadDefaultImage(CB);
                 }
             });
         }catch (IOException e){
@@ -140,5 +167,14 @@ public class PublicDBHelper {
         }
 
     }
-
+    private void loadDefaultImage(final getUserImageFileCallBack CB){
+        this.getUserImage("placeholder.png",new PublicDBHelper.getUserImageFileCallBack() {
+            @Override
+            public void Result(boolean result, File file, Uri uri, FileDownloadTask.TaskSnapshot taskSnapshot) {
+                if(result==true){
+                    CB.Result(false, file, uri, null);
+                }
+            }
+        });
+    }
 }
