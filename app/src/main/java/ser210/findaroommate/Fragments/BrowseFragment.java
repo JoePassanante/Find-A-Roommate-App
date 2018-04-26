@@ -122,9 +122,9 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
 
     private void onRightButtonClick(View view) {
         User n = getNextUser();
+        Log.i("User Comp",n.getUid() + " | " + this.mAuth.getCurrentUser().getUid());
         //check to make sure that user doesnt equal ourself.
-        if(n.getUid()==mAuth.getCurrentUser().getUid()){
-            n = getNextUser();
+        if(n.getUid().contentEquals(mAuth.getCurrentUser().getUid())){
             onRightButtonClick(view);
             return;
         }
@@ -133,8 +133,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
     private void onLeftButtonClick(View view){
         User n = getLastUser();
         //check to make sure that user doesn't equal oneself.
-        if(n.getUid()==mAuth.getCurrentUser().getUid()){
-            n = getLastUser();
+        if(n.getUid().contentEquals(mAuth.getCurrentUser().getUid())){
             onLeftButtonClick(view);
             return;
         }

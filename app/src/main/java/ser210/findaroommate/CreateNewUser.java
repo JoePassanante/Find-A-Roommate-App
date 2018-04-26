@@ -63,11 +63,13 @@ public class CreateNewUser extends Activity {
             String lastName = ((EditText) findViewById(R.id.field_lastname)).getText().toString();
             String housing = ((EditText) findViewById(R.id.field_housingpref)).getText().toString();
             String phone = ((EditText) findViewById(R.id.field_phone)).getText().toString();
+            String desc = ((EditText) findViewById(R.id.DescField)).getText().toString();
             //create a new user
             User user = new User();
             user.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
             user.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
             user.setLastName(lastName);
+            user.setDescription(desc);
             user.setFirstName(firstName);
             user.setHousingPref(housing);
             user.setPhoneNumber(phone);
