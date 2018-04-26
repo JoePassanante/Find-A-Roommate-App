@@ -22,14 +22,14 @@ import ser210.findaroommate.Support.PublicDBHelper;
  * A simple {@link Fragment} subclass.
  */
 public class MyProfileFragment extends Fragment {
-    FrameLayout _myProfileFrame;
-    FirebaseAuth mAuth;
-    PublicDBHelper publicDB;
-    String _userName;
-    String _userHousing;
-    int _userParty;
-    String _userDescription;
-    String _userPhone;
+    private FrameLayout _myProfileFrame;
+    private FirebaseAuth mAuth;
+    private PublicDBHelper publicDB;
+    private String _userName;
+    private String _userHousing;
+    private int _userParty;
+    private String _userDescription;
+    private String _userPhone;
 
     public MyProfileFragment() {
         // Required empty public constructor
@@ -52,18 +52,20 @@ public class MyProfileFragment extends Fragment {
         publicDB.findUser(mAuth.getCurrentUser().getUid(), new PublicDBHelper.findUserCallback() {
             @Override
             public void findUserCallBack(boolean b, User user) {
+                Log.i("Loading Profile","Found " + String.valueOf(b) + " " + user.getUid());
                 _userName = user.getFirstName() + " " + user.getLastName();
                 _userHousing = user.getHousingPref();
                 _userParty = user.getPartyPreference();
-                //_userDescription = user.getDescription(); description not implemented yet
+                _userDescription = user.getDescription();
                 _userPhone = user.getPhoneNumber();
 
                 Bundle bundle = new Bundle();
                 bundle.putString("name", _userName);
                 bundle.putString("housing", _userHousing);
                 bundle.putInt("party", _userParty);
-                //bundle.putString("description", _userDescription);
+                bundle.putString("description", _userDescription);
                 bundle.putString("phone", _userPhone);
+                bundle.putString("UID",user.getUid());
 
                 //Pass to the User Profile Fragment
                 Fragment myProfilefrag = new UserProfileFragment();
@@ -75,12 +77,6 @@ public class MyProfileFragment extends Fragment {
                 ft.commit();
             }
         });
-
-
-
-
-
-
 
 
         return v;

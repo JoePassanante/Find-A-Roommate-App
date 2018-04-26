@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
 import ser210.findaroommate.Models.User;
 import ser210.findaroommate.R;
 import ser210.findaroommate.Support.PublicDBHelper;
@@ -22,19 +24,17 @@ import ser210.findaroommate.Support.PublicDBHelper;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BrowseFragment extends Fragment implements View.OnClickListener{
-    View _v;
-    ImageButton _leftButton;
-    ImageButton _rightButton;
-    FrameLayout _profileFrame;
-    FirebaseAuth mAuth;
-    PublicDBHelper publicDB;
+public class BrowseFragment extends Fragment implements View.OnClickListener {
+    private View _v;
+    private ImageButton _leftButton;
+    private ImageButton _rightButton;
+    private FrameLayout _profileFrame;
+    private FirebaseAuth mAuth;
+    private PublicDBHelper publicDB;
 
-    String _userName;
-    String _userHousing;
-    int _userParty;
-    String _userDescription;
-    String _userPhone;
+    //DB loaded stuff
+    private ArrayList<User>FinalUserList;
+    private int currentView = 0;
 
     public BrowseFragment() {
         // Required empty public constructor
@@ -56,82 +56,88 @@ public class BrowseFragment extends Fragment implements View.OnClickListener{
         mAuth = FirebaseAuth.getInstance();
         publicDB = new PublicDBHelper();
 
-
-        //--GET FIRST USER FROM DATABASE AND PUT INTO NEW FRAGMENT--//
-        publicDB.findUser(mAuth.getCurrentUser().getUid(), new PublicDBHelper.findUserCallback() {
+        //time to get all the users we want to look at
+        publicDB.getListofUsers(new PublicDBHelper.userIDListCallback() {
             @Override
-            public void findUserCallBack(boolean b, User user) {
-                _userName = user.getFirstName() + " " + user.getLastName();
-                _userHousing = user.getHousingPref();
-                _userParty = user.getPartyPreference();
-                //_userDescription = user.getDescription(); description not implemented yet
-                _userPhone = user.getPhoneNumber();
-
-                Bundle bundle = new Bundle();
-                bundle.putString("name", _userName);
-                bundle.putString("housing", _userHousing);
-                bundle.putInt("party", _userParty);
-                //bundle.putString("description", _userDescription);
-                bundle.putString("phone", _userPhone);
-
-
-                Fragment firstProfile = new UserProfileFragment();
-                firstProfile.setArguments(bundle);
-
-
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(_profileFrame.getId(), firstProfile);
-                ft.commit();
-
+            public void userIDListCallback(ArrayList<String> UIDS, ArrayList<User> UserList) {
+                FinalUserList = UserList;
+                if(UserList.size()>0)
+                    loadUser(UserList.get(0));
             }
         });
-
-
-
 
         return _v;
 
     }
 
-    public User getUser(){
-        //--PUT YOUR CODE TO GET A USER HERE--//
-
-        return null;
-    }
-
-
     @Override
     public void onClick(View v) {
-        if(v.getId() == _leftButton.getId()){
-            //--GET PREVIOUS USER FROM DATABASE--//
-            //if no last do nothing show toast
+        if (v.getId() == _leftButton.getId()) {
+            this.onLeftButtonClick(v);
         }
 
-        if(v.getId() == _rightButton.getId()){
-            //--GET NEXT USER FROM DATABASE--//
-            //if no next do nothing show toast
+        if (v.getId() == _rightButton.getId()) {
+            this.onRightButtonClick(v);
         }
+    }
 
+    private User getNextUser() {
+        this.currentView++;
+        this.runIndexCheck();
+        return this.FinalUserList.get(currentView);
+    }
+    private User getLastUser(){
+        this.currentView--;
+        this.runIndexCheck();
+        return this.FinalUserList.get(currentView);
+    }
+    private void runIndexCheck(){
+        if(this.currentView>=this.FinalUserList.size()){
+            this.currentView = 0;
+        }else if(this.currentView<0){
+            this.currentView = FinalUserList.size()-1;
+        }
+    }
 
+    private void loadUser(User user){
         //create brand new Profile Fragment
         Fragment profileFrag = new UserProfileFragment();
         Bundle bundle = new Bundle();
-        //--PUT NEW USER INTO BUNDLE--//
-        //look at the on create code
+        String name = user.getFirstName() + " " + user.getLastName();
+
+        bundle.putString("name", ((name.isEmpty()||name.contentEquals(" "))?user.getUid(): name));
+        bundle.putString("housing", user.getHousingPref());
+        bundle.putInt("party", user.getPartyPreference());
+        bundle.putString("description", user.getDescription());
+        bundle.putString("phone", user.getPhoneNumber());
+        bundle.putString("UID",user.getUid());
+
 
         profileFrag.setArguments(bundle);
-        //replace it
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(_profileFrame.getId(), profileFrag);
         ft.commit();
-
-
-
     }
 
-    public void onButtonClick(View view){
-
+    private void onRightButtonClick(View view) {
+        User n = getNextUser();
+        //check to make sure that user doesnt equal ourself.
+        if(n.getUid()==mAuth.getCurrentUser().getUid()){
+            n = getNextUser();
+            onRightButtonClick(view);
+            return;
+        }
+        this.loadUser(n);
+    }
+    private void onLeftButtonClick(View view){
+        User n = getLastUser();
+        //check to make sure that user doesn't equal oneself.
+        if(n.getUid()==mAuth.getCurrentUser().getUid()){
+            n = getLastUser();
+            onLeftButtonClick(view);
+            return;
+        }
+        this.loadUser(n);
     }
 }

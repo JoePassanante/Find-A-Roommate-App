@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
         //Change home image to profile picture for demo
-        new PublicDBHelper().getUserFile(FirebaseAuth.getInstance().getCurrentUser().getUid(), new PublicDBHelper.getUserImageFileCallBack() {
+        new PublicDBHelper().getUserImage(FirebaseAuth.getInstance().getCurrentUser().getUid(), new PublicDBHelper.getUserImageFileCallBack() {
             @Override
             public void Result(boolean result, File file, Uri uri, FileDownloadTask.TaskSnapshot taskSnapshot) {
                     if(getView()==null){
