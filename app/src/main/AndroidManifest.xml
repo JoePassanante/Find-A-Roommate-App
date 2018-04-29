@@ -23,8 +23,8 @@
         </activity>
         <activity android:name=".HomeActivity" />
         <activity android:name=".CreateProfileActivity" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".CreateNewUser"></activity>
+        <activity android:name=".CreateNewUser" />
+        <activity android:name=".EditUserActivity"></activity>
     </application>
 
 </manifest>
