@@ -66,4 +66,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name = "remember">Remember this account for the future!</string>
     <string name = "descriptionfield">Description of yourself</string>
+    <string name = "match">Match</string>
 </resources>
