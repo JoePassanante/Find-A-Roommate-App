@@ -38,6 +38,7 @@ public class UserProfileFragment extends Fragment {
     private String description = " ";
     private String phone = " ";
     private String UserID;
+    private boolean privatePhone = false;
     public UserProfileFragment() {
         // Required empty public constructor
     }
@@ -65,14 +66,21 @@ public class UserProfileFragment extends Fragment {
         phone = args.getString("phone");
         UserID = args.getString("UID");
 
-        //make sure party varible is within index
-        party = (party<0 || getResources().getStringArray(R.array.PartyOptions).length >= party)? 0:party;
+        //make sure party variable is within index
+        party = (party<0 || party > getResources().getStringArray(R.array.PartyOptions).length)? 0:party;
 
         _nameText.setText(name); //change to first name + " " + last name
         _housingText.setText(housing);
         _partyText.setText(getResources().getStringArray(R.array.PartyOptions)[party]);
         _descriptionText.setText(description);
         _phoneText.setText(phone);
+        if(this.privatePhone){
+            _phoneText.setVisibility(View.INVISIBLE);
+            ((TextView)v.findViewById(R.id.phone_title)).setVisibility(View.INVISIBLE);
+        }else{
+            _phoneText.setVisibility(View.VISIBLE);
+            ((TextView)v.findViewById(R.id.phone_title)).setVisibility(View.VISIBLE);
+        }
 
         loadImage(this.UserID,((ImageView)v.findViewById(R.id.user_image)));
 
@@ -86,5 +94,13 @@ public class UserProfileFragment extends Fragment {
                 image.setImageURI(uri);
             }
         });
+    }
+
+    public boolean isPrivatePhone() {
+        return privatePhone;
+    }
+
+    public void setPrivatePhone(boolean privatePhone) {
+        this.privatePhone = privatePhone;
     }
 }

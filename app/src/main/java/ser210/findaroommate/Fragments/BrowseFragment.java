@@ -108,7 +108,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
 
     private void loadUser(User user){
         //create brand new Profile Fragment
-        Fragment profileFrag = new UserProfileFragment();
+        UserProfileFragment profileFrag = new UserProfileFragment();
         Bundle bundle = new Bundle();
         String name = user.getFirstName() + " " + user.getLastName();
 
@@ -119,7 +119,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
         bundle.putString("phone", user.getPhoneNumber());
         bundle.putString("UID",user.getUid());
 
-
+        profileFrag.setPrivatePhone(true);
         profileFrag.setArguments(bundle);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

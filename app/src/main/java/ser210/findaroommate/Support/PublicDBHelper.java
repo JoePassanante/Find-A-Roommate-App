@@ -183,8 +183,6 @@ public class PublicDBHelper {
     /* How matches work:
         When a user matches with another user, they create a match object that is stored directly in the root of the database.
         When the match is created in the database, both users under their respective ID will find a match-reference to the match object stored
-
-
     */
     public static interface MatchListCallback {
         void userIDListCallback(ArrayList<String> MatchIDs);
@@ -236,7 +234,7 @@ public class PublicDBHelper {
                                 findMatch(MatchIDs.get(currentIteration), new findMatchCallback() {
                                     @Override
                                     public void findMatchCallback(Match m) {
-                                        int myInteration = x;
+                                        int myIteration = x;
                                         if (m == null) //ID doesn't exist
                                             return;
                                         //If the match ID is there, we will call update match
@@ -252,9 +250,9 @@ public class PublicDBHelper {
                                             Log.i("MatchSearch", "Match invalid");
 
                                             //check to see if we are at the end of the loop
-                                            Log.i("My Iteration", String.valueOf(myInteration));
+                                            Log.i("My Iteration", String.valueOf(myIteration));
                                             //when we are the last match checked... see if we need to generate one
-                                            if (myInteration == MatchIDs.size() - 1) {
+                                            if (myIteration == MatchIDs.size() - 1) {
                                                 //check to see if we had any valid matches, if we did not that means all our current matches do not contain the user we
                                                 //want to match with. Therefore, make a new match.
                                                 if (workingMatches.isEmpty()) {
@@ -328,42 +326,45 @@ public class PublicDBHelper {
         getListofMatches(UID, new MatchListCallback() {
             @Override
             public void userIDListCallback(final ArrayList<String> MatchIDs) {
-
+                if(MatchIDs.isEmpty()){
+                    MCB.userIDListCallback(UIDS,Users);
+                    return;
+                }
                 //Run through the list of matches
                 for (int currentIteration = 0; currentIteration < MatchIDs.size(); currentIteration++) {
                     final int x = currentIteration;
 
                     //Find the match using MatchID
                     findMatch(MatchIDs.get(currentIteration), new findMatchCallback() {
-                        int myInteration = x;
+                        int myIteration = x;
                         @Override
                         public void findMatchCallback(Match m) {
                             //Check if both users are confirmed
-                            if(m.isUserOneConfirm() && m.isUserTwoConfirm()){
+                            String searchUID = "";
+                            if(m.isUserOneConfirm() && m.isUserTwoConfirm()) {
                                 //Check which slot contains the foreign UID
-                                String searchUID = "";
-                                if(m.getUserIDOne().contentEquals(UID)){ //if slot one is UID, slot 2 must be the foreign user
-                                   searchUID = m.getUserIDTwo();
-                                }else{ //if we are not slot 1, we must be slot two, therefore foreign UID is in slot 1
+                                if (m.getUserIDOne().contentEquals(UID)) { //if slot one is UID, slot 2 must be the foreign user
+                                    searchUID = m.getUserIDTwo();
+                                } else { //if we are not slot 1, we must be slot two, therefore foreign UID is in slot 1
                                     searchUID = m.getUserIDOne();
                                 }
-
+                            }
                                 //Very last callback in the chain
                                 findUser(searchUID, new findUserCallback() {
                                     @Override
                                     public void findUserCallBack(boolean b, User user) {
-                                        if(b && user!=null){
+                                        if(b && user!=null && !user.getUid().isEmpty()) {
                                             Users.add(user);
                                             UIDS.add(user.getUid());
-                                            //
-                                            Log.i("Get Confirm","We at " + myInteration);
-                                            if (myInteration == MatchIDs.size() - 1) {
+                                        }
+                                            Log.i("Get Confirm","We at " + myIteration);
+                                            if (myIteration == MatchIDs.size() - 1) {
                                                 MCB.userIDListCallback(UIDS,Users);
-                                            }
+
                                         }
                                     }
                                 });//END Find USER
-                            }//end confirm
+
                         }
                     }); // END FIND MATCH CALL BACK
                 }//END FOR LOOP
