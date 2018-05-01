@@ -14,16 +14,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".CreateNewUser"></activity>
+        <activity android:name=".HomeActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".CreateProfileActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".CreateNewUser"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".EditUserActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
     </application>
 
 </manifest>

@@ -162,6 +162,14 @@ public class HomeActivity extends Activity {
     private void performOtherAction() {
         if (_visibleFragment instanceof MyProfileFragment) {
             //--CODE FOR EDITING MY PROFILE--//
+            Intent intent = new Intent(this, EditUserActivity.class);
+            intent.putExtra("first_name", me.getFirstName());
+            intent.putExtra("last_name", me.getLastName());
+            intent.putExtra("housing_pref", me.getHousingPref());
+            intent.putExtra("phone_num", me.getPhoneNumber());
+            intent.putExtra("descrip", me.getDescription());
+            intent.putExtra("party_pref", me.getPartyPreference());
+            startActivity(intent);
         }
 
         if (_visibleFragment instanceof BrowseFragment) {
