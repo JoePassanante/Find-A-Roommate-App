@@ -1,11 +1,10 @@
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ser210.findaroommate.Fragments.BrowseFragment"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:context="ser210.findaroommate.Fragments.BrowseFragment">
 
 
     <ImageButton
@@ -13,17 +12,39 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@drawable/ic_chevron_left_black_24dp"
-        />
+        android:src="@drawable/ic_chevron_left_black_24dp" />
 
-
-    <FrameLayout
-        android:id="@+id/profile_frame"
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="8">
 
-    </FrameLayout>
+        <RelativeLayout
+            android:id="@+id/profileHolder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/profile_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <FrameLayout
+                android:layout_below="@id/profile_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/matchwithuser"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/match"
+                    android:theme="@style/ThemeOverlay.MyDarkButton" />
+            </FrameLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
 
     <ImageButton
         android:id="@+id/rightButton"
@@ -31,8 +52,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:onClick="onClick"
-        android:src="@drawable/ic_chevron_right_black_24dp"
-        />
+        android:src="@drawable/ic_chevron_right_black_24dp" />
 
 
 </LinearLayout>

@@ -9,10 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
     private View _v;
     private ImageButton _leftButton;
     private ImageButton _rightButton;
+    private Button _matchButton;
     private FrameLayout _profileFrame;
     private FirebaseAuth mAuth;
     private PublicDBHelper publicDB;
@@ -51,6 +54,8 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
         _leftButton.setOnClickListener(this);
         _rightButton = (ImageButton) _v.findViewById(R.id.rightButton);
         _rightButton.setOnClickListener(this);
+        _matchButton = (Button)_v.findViewById(R.id.matchwithuser);
+        _matchButton.setOnClickListener(this);
         _profileFrame = (FrameLayout) _v.findViewById(R.id.profile_frame);
 
         mAuth = FirebaseAuth.getInstance();
@@ -62,7 +67,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
             public void userIDListCallback(ArrayList<String> UIDS, ArrayList<User> UserList) {
                 FinalUserList = UserList;
                 if(UserList.size()>0)
-                    loadUser(UserList.get(0));
+                    onRightButtonClick(null);
             }
         });
 
@@ -74,10 +79,12 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == _leftButton.getId()) {
             this.onLeftButtonClick(v);
-        }
-
+        }else
         if (v.getId() == _rightButton.getId()) {
             this.onRightButtonClick(v);
+        }else
+        if(v.getId() == this._matchButton.getId()){
+            this.onMatchButtonClick(v);
         }
     }
 
@@ -101,7 +108,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
 
     private void loadUser(User user){
         //create brand new Profile Fragment
-        Fragment profileFrag = new UserProfileFragment();
+        UserProfileFragment profileFrag = new UserProfileFragment();
         Bundle bundle = new Bundle();
         String name = user.getFirstName() + " " + user.getLastName();
 
@@ -112,7 +119,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
         bundle.putString("phone", user.getPhoneNumber());
         bundle.putString("UID",user.getUid());
 
-
+        profileFrag.setPrivatePhone(true);
         profileFrag.setArguments(bundle);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
@@ -124,7 +131,7 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
         User n = getNextUser();
         Log.i("User Comp",n.getUid() + " | " + this.mAuth.getCurrentUser().getUid());
         //check to make sure that user doesnt equal ourself.
-        if(n.getUid().contentEquals(mAuth.getCurrentUser().getUid())){
+        if(n.getUid().contentEquals(mAuth.getCurrentUser().getUid())&& FinalUserList.size()>1){
             onRightButtonClick(view);
             return;
         }
@@ -133,10 +140,15 @@ public class BrowseFragment extends Fragment implements View.OnClickListener {
     private void onLeftButtonClick(View view){
         User n = getLastUser();
         //check to make sure that user doesn't equal oneself.
-        if(n.getUid().contentEquals(mAuth.getCurrentUser().getUid())){
+        if(n.getUid().contentEquals(mAuth.getCurrentUser().getUid())&& FinalUserList.size()>1){
             onLeftButtonClick(view);
             return;
         }
         this.loadUser(n);
+    }
+    private void onMatchButtonClick(View view){
+        //capture current user
+        String matchedUser = this.FinalUserList.get(this.currentView).getUid();
+        this.publicDB.createNewMatch(matchedUser, mAuth.getCurrentUser().getUid());
     }
 }
