@@ -104,7 +104,6 @@ public class HomeActivity extends Activity {
 
         switch (position) {
             case 0: //HOME
-                item.setVisible(false);
                 fragment = new HomeFragment();
                 item.setTitle("Log Out");
                 item.setVisible(true);
@@ -116,13 +115,13 @@ public class HomeActivity extends Activity {
                 break;
             case 2: //BROWSE
                 fragment = new BrowseFragment();
-                item.setTitle("Contact");
-                item.setVisible(true);
+                //item.setTitle("Contact");
+                item.setVisible(false);
                 break;
             case 3: //MATCHES
                 fragment = new MatchesFragment();
-                item.setTitle("Edit");
-                item.setVisible(true);
+                //item.setTitle("Edit");
+                item.setVisible(false);
 
                 //--GET LIST OF MATCHES FROM LOCAL DATABASE--//
                 //pass as an array list through bundle and arguments
