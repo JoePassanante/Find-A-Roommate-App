@@ -1,12 +1,14 @@
 package ser210.findaroommate.Fragments;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
@@ -28,9 +30,7 @@ import ser210.findaroommate.Support.PublicDBHelper;
  * A simple {@link Fragment} subclass.
  */
 public class UserProfileFragment extends Fragment {
-    //--ADD OTHER VARIABLES AS YOU ADD THEM TO THE PROFILE--//
-    //where is messy vs neat or late vs early?
-    private TextView _nameText, _housingText,_partyText,_descriptionText,_phoneText;
+    private TextView _nameText, _housingText, _partyText, _descriptionText, _phoneText;
 
     private String name = " ";
     private String housing = " ";
@@ -39,6 +39,8 @@ public class UserProfileFragment extends Fragment {
     private String phone = " ";
     private String UserID;
     private boolean privatePhone = false;
+    private boolean showContact = false;
+
     public UserProfileFragment() {
         // Required empty public constructor
     }
@@ -67,27 +69,41 @@ public class UserProfileFragment extends Fragment {
         UserID = args.getString("UID");
 
         //make sure party variable is within index
-        party = (party<0 || party > getResources().getStringArray(R.array.PartyOptions).length)? 0:party;
+        party = (party < 0 || party > getResources().getStringArray(R.array.PartyOptions).length) ? 0 : party;
 
         _nameText.setText(name); //change to first name + " " + last name
         _housingText.setText(housing);
         _partyText.setText(getResources().getStringArray(R.array.PartyOptions)[party]);
         _descriptionText.setText(description);
         _phoneText.setText(phone);
-        if(this.privatePhone){
-            _phoneText.setVisibility(View.INVISIBLE);
-            ((TextView)v.findViewById(R.id.phone_title)).setVisibility(View.INVISIBLE);
-        }else{
+        if (this.privatePhone) {
+            _phoneText.setVisibility(View.GONE);
+            ((TextView) v.findViewById(R.id.phone_title)).setVisibility(View.GONE);
+            ((Button) v.findViewById(R.id.contactUser)).setVisibility(View.GONE);
+        } else {
             _phoneText.setVisibility(View.VISIBLE);
-            ((TextView)v.findViewById(R.id.phone_title)).setVisibility(View.VISIBLE);
+            ((TextView) v.findViewById(R.id.phone_title)).setVisibility(View.VISIBLE);
+            if (this.showContact) {
+                ((Button) v.findViewById(R.id.contactUser)).setVisibility(View.VISIBLE);
+                ((Button) v.findViewById(R.id.contactUser)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                        sendIntent.setData(Uri.parse("smsto:" + phone));
+                        sendIntent.putExtra("sms_body", "Hello " + name + " I have matched with you!");
+                        startActivity(sendIntent);
+                    }
+                });
+            }
         }
 
-        loadImage(this.UserID,((ImageView)v.findViewById(R.id.user_image)));
+        loadImage(this.UserID, ((ImageView) v.findViewById(R.id.user_image)));
 
 
         return v;
     }
-    private void loadImage(String UID,final ImageView image){
+
+    private void loadImage(String UID, final ImageView image) {
         new PublicDBHelper().getUserImage(UID, new PublicDBHelper.getUserImageFileCallBack() {
             @Override
             public void Result(boolean result, File file, Uri uri, FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -102,5 +118,13 @@ public class UserProfileFragment extends Fragment {
 
     public void setPrivatePhone(boolean privatePhone) {
         this.privatePhone = privatePhone;
+    }
+
+    public boolean isShowContact() {
+        return showContact;
+    }
+
+    public void setShowContact(boolean showContact) {
+        this.showContact = showContact;
     }
 }

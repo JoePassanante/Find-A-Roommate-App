@@ -1,6 +1,8 @@
 package ser210.findaroommate.Fragments;
 
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 
 import ser210.findaroommate.Models.User;
 import ser210.findaroommate.R;
+import ser210.findaroommate.Support.MatchesCustomAdaptor;
 import ser210.findaroommate.Support.PublicDBHelper;
 
 
@@ -36,27 +39,69 @@ public class MatchesFragment extends ListFragment {
                              Bundle savedInstanceState) {
         final Context context = inflater.getContext();
         //--GET ARRAY LIST FROM ARGUMENTS AND SET IT TO _matches --//
+        this.setListAdapt(context);
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+
+
+
+    private void setListAdapt(final Context context){
         new PublicDBHelper().getMatchedUsers(FirebaseAuth.getInstance().getCurrentUser().getUid(), new PublicDBHelper.userIDListCallback() {
             @Override
             public void userIDListCallback(ArrayList<String> UIDS, ArrayList<User> UserList) {
                 Log.i("List",String.valueOf(UIDS.size()));
                 myMatches = UserList;
-                ArrayAdapter<User> adapter = new ArrayAdapter<User>(
-                        context,
-                        android.R.layout.simple_list_item_1,
-                        UserList);
-                setListAdapter(adapter);
+                MatchesCustomAdaptor adapt = new MatchesCustomAdaptor(UserList,context);
+                adapt.setButtonHandler(new MatchesCustomAdaptor.MatchesCustomAdaptorButtonFunctions() {
+                    @Override
+                    public void onDeletePress(View view, int pos, User user) {
+                        DeleteButton(view, pos, user, context);
+                    }
+
+                    @Override
+                    public void onViewPress(View view, int pos, User user) {
+                        ViewButton(view, pos, user, context);
+                    }
+                });
+                setListAdapter(adapt);
             }
         });
-
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        if(myMatches==null || myMatches.isEmpty())
-            return;
 
-        //ALEXANDRA ADD UI LOGIC HERE
 
+    private void ViewButton(View view, int pos, User user, Context context){
+        Log.i("Button","View: " + pos + " | " + user.toString());
+        FragmentManager fm = getFragmentManager();
+        UserProfileFragment fragment = new UserProfileFragment();
+        Bundle bundle = new Bundle();
+        String name = user.getFirstName() + " " + user.getLastName();
+
+        bundle.putString("name", ((name.isEmpty()||name.contentEquals(" "))?user.getUid(): name));
+        bundle.putString("housing", user.getHousingPref());
+        bundle.putInt("party", user.getPartyPreference());
+        bundle.putString("description", user.getDescription());
+        bundle.putString("phone", user.getPhoneNumber());
+        bundle.putString("UID",user.getUid());
+
+        fragment.setPrivatePhone(false); // we are matched with them, and therefore should see their phone number
+        fragment.setShowContact(true);
+        fragment.setArguments(bundle);
+
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.content_frame, fragment);
+        ft.addToBackStack(null);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.commit();
+    }
+    private void DeleteButton(View view, int pos, User user, final Context context){
+        Log.i("Button","Delete: " + pos + " | " + user.toString());
+        new PublicDBHelper().removeMatch(FirebaseAuth.getInstance().getCurrentUser().getUid(), user.getUid(), new PublicDBHelper.removeMatchCallBack() {
+            @Override
+            public void removed(boolean b) {
+                setListAdapt(context); // Refresh List
+            }
+        });
     }
 }

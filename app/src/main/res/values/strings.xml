@@ -68,4 +68,5 @@
     <string name = "remember">Remember this account for the future!</string>
     <string name = "descriptionfield">Description of yourself</string>
     <string name = "match">Match</string>
+    <string name = "contact">Contact</string>
 </resources>
