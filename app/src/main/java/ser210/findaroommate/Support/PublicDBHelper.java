@@ -56,6 +56,11 @@ public class PublicDBHelper {
         void findUserCallBack(boolean b, User user);
     }
 
+    /**
+     *
+     * @param uid - User ID to find
+     * @param CB - Callback when user is found/not found
+     */
     public void findUser(final String uid, final findUserCallback CB) {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -86,9 +91,18 @@ public class PublicDBHelper {
 
     //
     public static interface userIDListCallback {
+        /**
+         *
+         * @param UIDS - List of user ID's, if we only want to save strings (as saving entire users can get expensive)
+         * @param UserList - List of User Objects
+         */
         void userIDListCallback(ArrayList<String> UIDS, ArrayList<User> UserList);
     }
 
+    /**
+     *
+     * @param CB - Gets list of all the users in teh databse
+     */
     public void getListofUsers(final userIDListCallback CB) {
         myRef.child(PublicDBHelper.USER_LIST).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -111,6 +125,12 @@ public class PublicDBHelper {
 
 
     //Add new Firebase User
+
+    /**
+     * Creates a new user based of the FirebaseUser information. Leaves profile details empty.
+     * @param user - Firebase user
+     * @return
+     */
     public boolean setNewAuthUser(FirebaseUser user) {
         String id = user.getUid();
         User rawUser = new User();
@@ -121,6 +141,13 @@ public class PublicDBHelper {
     }
 
     //uploadImages
+
+    /**
+     *
+     * @param UID - User ID to upload image under
+     * @param uri - Path to image that we are uploading
+     * @return
+     */
     public static boolean uploadImage(String UID, Uri uri) {
         StorageReference targetRef = storageRef.child("UserProfileImages/" + UID);
         UploadTask uploadTask = targetRef.putFile(uri);
@@ -143,9 +170,21 @@ public class PublicDBHelper {
 
     //getImagesOfUser
     public static interface getUserImageFileCallBack {
+        /**
+         *
+         * @param result - True - Found USER image(False if default)
+         * @param file - File location of found image
+         * @param uri - Uri of image
+         * @param taskSnapshot - taskSnapshot for reference
+         */
         void Result(boolean result, File file, Uri uri, FileDownloadTask.TaskSnapshot taskSnapshot);
     }
 
+    /**
+     *
+     * @param UID - User ID to find image, will return with default image if not found
+     * @param CB - Call Back for when image is found.
+     */
     public void getUserImage(String UID, final getUserImageFileCallBack CB) {
         try {
             final File localFile = File.createTempFile(UID, "jpg");
@@ -168,6 +207,10 @@ public class PublicDBHelper {
 
     }
 
+    /**
+     *
+     * @param CB - Callback method for getting placeholder image
+     */
     private void loadDefaultImage(final getUserImageFileCallBack CB) {
         this.getUserImage("placeholder.png", new PublicDBHelper.getUserImageFileCallBack() {
             @Override
@@ -213,6 +256,13 @@ public class PublicDBHelper {
     }
 
     //Match with users
+
+    /**
+     * This method checks to see if a match already exists, if it does than it simply updates the match to reflex that UID accepts Foreign UID
+     * If no match is found, creates a new one where Foreign ID is unconfirmed
+     * @param foreignUID - User ID one to match with (Verified internally)
+     * @param myUID - User ID two to match with (Not Verified, expected to be own ID)
+     */
     public void createNewMatch(final String foreignUID, final String myUID) {
         this.findUser(foreignUID, new findUserCallback() { //Check to see if the foreign user exists.. we assume myUID works
             @Override
@@ -276,6 +326,13 @@ public class PublicDBHelper {
         });
     }
 
+    /**
+     *
+     * @param foreignUID - User ID one to match with, THERE IS NO FACT CHECKING FOR THIS (Verify real ID before executing)
+     * @param myUID - User ID two that is matching, NO FACT CHECKING(Verify real ID before executing)
+     * @param matchList - Database reference to match list
+     * @param userList - Database reference to user list
+     */
     private void makeANewMatch(String foreignUID, String myUID, DatabaseReference matchList, DatabaseReference userList) {
         //CREATE NEW MATCH
         String key = matchList.push().getKey();
@@ -290,16 +347,33 @@ public class PublicDBHelper {
         userList.child(foreignUID).child(userList.child(foreignUID).push().getKey()).setValue(key);
     }
 
+    /**
+     *
+     * @param foreignID - Foreign User ID that is being called on to match with
+     * @param foreignState - Foreign state, as in if they have already confirmed or not
+     * @param myID - Current User ID
+     * @param myState - Current User State(should be true if trying to match with this foreign)
+     * @param matchID - The match ID of the currently existing match we are updating
+     * @param matchList - Database reference to Match List.
+     */
     private void updateMatch(String foreignID, boolean foreignState, String myID, boolean myState, String matchID, DatabaseReference matchList) {
         Match m = new Match(foreignID, foreignState, myID, myState);
         m.setMyKey(matchID);
         matchList.child(matchID).setValue(m);
     }
 
+    /**
+     * Interface used as callback template for finding a match
+     */
     public static interface findMatchCallback {
         void findMatchCallback(Match m);
     }
 
+    /**
+     *
+     * @param matchID - Match ID to find in database
+     * @param CB - Call back to return Match Object, when/ if match is found, else null
+     */
     public void findMatch(final String matchID, final findMatchCallback CB) {
         myRef.child(MATCH_LIST).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -318,6 +392,11 @@ public class PublicDBHelper {
         });
     }
 
+    /**
+     *
+     * @param UID - User ID to look up matches
+     * @param MCB - Call Back method when results are found.
+     */
     public void getMatchedUsers(final String UID, final userIDListCallback MCB) {
         final ArrayList<String> UIDS = new ArrayList<String>();
         final ArrayList<User>Users = new ArrayList<User>();
