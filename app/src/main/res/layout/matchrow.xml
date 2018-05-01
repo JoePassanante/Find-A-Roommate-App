@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:weightSum="10"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_weight="9"
+        android:id="@+id/list_item_string"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="John Smith"
+        android:textStyle="bold" />
+    <Button
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/ThemeOverlay.MyViewButton"
+        android:id="@+id/view_btn"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_weight="0.5"
+        android:text="View" />
+    <Button
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:theme="@style/ThemeOverlay.MyDeleteButton"
+        android:id="@+id/delete_btn"
+        android:layout_width="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:text="Delete" />
+
+
+</LinearLayout>

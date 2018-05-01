@@ -57,9 +57,8 @@ public class PublicDBHelper {
     }
 
     /**
-     *
      * @param uid - User ID to find
-     * @param CB - Callback when user is found/not found
+     * @param CB  - Callback when user is found/not found
      */
     public void findUser(final String uid, final findUserCallback CB) {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -92,15 +91,13 @@ public class PublicDBHelper {
     //
     public static interface userIDListCallback {
         /**
-         *
-         * @param UIDS - List of user ID's, if we only want to save strings (as saving entire users can get expensive)
+         * @param UIDS     - List of user ID's, if we only want to save strings (as saving entire users can get expensive)
          * @param UserList - List of User Objects
          */
         void userIDListCallback(ArrayList<String> UIDS, ArrayList<User> UserList);
     }
 
     /**
-     *
      * @param CB - Gets list of all the users in teh databse
      */
     public void getListofUsers(final userIDListCallback CB) {
@@ -128,6 +125,7 @@ public class PublicDBHelper {
 
     /**
      * Creates a new user based of the FirebaseUser information. Leaves profile details empty.
+     *
      * @param user - Firebase user
      * @return
      */
@@ -143,7 +141,6 @@ public class PublicDBHelper {
     //uploadImages
 
     /**
-     *
      * @param UID - User ID to upload image under
      * @param uri - Path to image that we are uploading
      * @return
@@ -171,19 +168,17 @@ public class PublicDBHelper {
     //getImagesOfUser
     public static interface getUserImageFileCallBack {
         /**
-         *
-         * @param result - True - Found USER image(False if default)
-         * @param file - File location of found image
-         * @param uri - Uri of image
+         * @param result       - True - Found USER image(False if default)
+         * @param file         - File location of found image
+         * @param uri          - Uri of image
          * @param taskSnapshot - taskSnapshot for reference
          */
         void Result(boolean result, File file, Uri uri, FileDownloadTask.TaskSnapshot taskSnapshot);
     }
 
     /**
-     *
      * @param UID - User ID to find image, will return with default image if not found
-     * @param CB - Call Back for when image is found.
+     * @param CB  - Call Back for when image is found.
      */
     public void getUserImage(String UID, final getUserImageFileCallBack CB) {
         try {
@@ -208,7 +203,6 @@ public class PublicDBHelper {
     }
 
     /**
-     *
      * @param CB - Callback method for getting placeholder image
      */
     private void loadDefaultImage(final getUserImageFileCallBack CB) {
@@ -228,7 +222,7 @@ public class PublicDBHelper {
         When the match is created in the database, both users under their respective ID will find a match-reference to the match object stored
     */
     public static interface MatchListCallback {
-        void userIDListCallback(ArrayList<String> MatchIDs);
+        void matchIDListCallback(ArrayList<String> MatchIDs);
     }
 
     /**
@@ -245,12 +239,12 @@ public class PublicDBHelper {
                     myReturn.add(child.getValue().toString());
                     Log.i("Return", child.getValue().toString());
                 }
-                CB.userIDListCallback(myReturn);
+                CB.matchIDListCallback(myReturn);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                CB.userIDListCallback(null);
+                CB.matchIDListCallback(null);
             }
         });
     }
@@ -260,8 +254,9 @@ public class PublicDBHelper {
     /**
      * This method checks to see if a match already exists, if it does than it simply updates the match to reflex that UID accepts Foreign UID
      * If no match is found, creates a new one where Foreign ID is unconfirmed
+     *
      * @param foreignUID - User ID one to match with (Verified internally)
-     * @param myUID - User ID two to match with (Not Verified, expected to be own ID)
+     * @param myUID      - User ID two to match with (Not Verified, expected to be own ID)
      */
     public void createNewMatch(final String foreignUID, final String myUID) {
         this.findUser(foreignUID, new findUserCallback() { //Check to see if the foreign user exists.. we assume myUID works
@@ -274,7 +269,7 @@ public class PublicDBHelper {
                 //
                 getListofMatches(myUID, new MatchListCallback() {
                     @Override
-                    public void userIDListCallback(final ArrayList<String> MatchIDs) {
+                    public void matchIDListCallback(final ArrayList<String> MatchIDs) {
                         if (!MatchIDs.isEmpty()) {
                             //We have a list of matches we need to check
                             //Save Matches
@@ -327,11 +322,10 @@ public class PublicDBHelper {
     }
 
     /**
-     *
      * @param foreignUID - User ID one to match with, THERE IS NO FACT CHECKING FOR THIS (Verify real ID before executing)
-     * @param myUID - User ID two that is matching, NO FACT CHECKING(Verify real ID before executing)
-     * @param matchList - Database reference to match list
-     * @param userList - Database reference to user list
+     * @param myUID      - User ID two that is matching, NO FACT CHECKING(Verify real ID before executing)
+     * @param matchList  - Database reference to match list
+     * @param userList   - Database reference to user list
      */
     private void makeANewMatch(String foreignUID, String myUID, DatabaseReference matchList, DatabaseReference userList) {
         //CREATE NEW MATCH
@@ -348,13 +342,12 @@ public class PublicDBHelper {
     }
 
     /**
-     *
-     * @param foreignID - Foreign User ID that is being called on to match with
+     * @param foreignID    - Foreign User ID that is being called on to match with
      * @param foreignState - Foreign state, as in if they have already confirmed or not
-     * @param myID - Current User ID
-     * @param myState - Current User State(should be true if trying to match with this foreign)
-     * @param matchID - The match ID of the currently existing match we are updating
-     * @param matchList - Database reference to Match List.
+     * @param myID         - Current User ID
+     * @param myState      - Current User State(should be true if trying to match with this foreign)
+     * @param matchID      - The match ID of the currently existing match we are updating
+     * @param matchList    - Database reference to Match List.
      */
     private void updateMatch(String foreignID, boolean foreignState, String myID, boolean myState, String matchID, DatabaseReference matchList) {
         Match m = new Match(foreignID, foreignState, myID, myState);
@@ -370,9 +363,8 @@ public class PublicDBHelper {
     }
 
     /**
-     *
      * @param matchID - Match ID to find in database
-     * @param CB - Call back to return Match Object, when/ if match is found, else null
+     * @param CB      - Call back to return Match Object, when/ if match is found, else null
      */
     public void findMatch(final String matchID, final findMatchCallback CB) {
         myRef.child(MATCH_LIST).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
@@ -393,20 +385,19 @@ public class PublicDBHelper {
     }
 
     /**
-     *
      * @param UID - User ID to look up matches
      * @param MCB - Call Back method when results are found.
      */
     public void getMatchedUsers(final String UID, final userIDListCallback MCB) {
         final ArrayList<String> UIDS = new ArrayList<String>();
-        final ArrayList<User>Users = new ArrayList<User>();
+        final ArrayList<User> Users = new ArrayList<User>();
 
         //Get list of all of the matches UID is involved in.
         getListofMatches(UID, new MatchListCallback() {
             @Override
-            public void userIDListCallback(final ArrayList<String> MatchIDs) {
-                if(MatchIDs.isEmpty()){
-                    MCB.userIDListCallback(UIDS,Users);
+            public void matchIDListCallback(final ArrayList<String> MatchIDs) {
+                if (MatchIDs.isEmpty()) {
+                    MCB.userIDListCallback(UIDS, Users);
                     return;
                 }
                 //Run through the list of matches
@@ -416,11 +407,12 @@ public class PublicDBHelper {
                     //Find the match using MatchID
                     findMatch(MatchIDs.get(currentIteration), new findMatchCallback() {
                         int myIteration = x;
+
                         @Override
                         public void findMatchCallback(Match m) {
                             //Check if both users are confirmed
                             String searchUID = "";
-                            if(m.isUserOneConfirm() && m.isUserTwoConfirm()) {
+                            if (m.isUserOneConfirm() && m.isUserTwoConfirm()) {
                                 //Check which slot contains the foreign UID
                                 if (m.getUserIDOne().contentEquals(UID)) { //if slot one is UID, slot 2 must be the foreign user
                                     searchUID = m.getUserIDTwo();
@@ -428,21 +420,21 @@ public class PublicDBHelper {
                                     searchUID = m.getUserIDOne();
                                 }
                             }
-                                //Very last callback in the chain
-                                findUser(searchUID, new findUserCallback() {
-                                    @Override
-                                    public void findUserCallBack(boolean b, User user) {
-                                        if(b && user!=null && !user.getUid().isEmpty()) {
-                                            Users.add(user);
-                                            UIDS.add(user.getUid());
-                                        }
-                                            Log.i("Get Confirm","We at " + myIteration);
-                                            if (myIteration == MatchIDs.size() - 1) {
-                                                MCB.userIDListCallback(UIDS,Users);
-
-                                        }
+                            //Very last callback in the chain
+                            findUser(searchUID, new findUserCallback() {
+                                @Override
+                                public void findUserCallBack(boolean b, User user) {
+                                    if (b && user != null && !user.getUid().isEmpty()) {
+                                        Users.add(user);
+                                        UIDS.add(user.getUid());
                                     }
-                                });//END Find USER
+                                    Log.i("Get Confirm", "We at " + myIteration);
+                                    if (myIteration == MatchIDs.size() - 1) {
+                                        MCB.userIDListCallback(UIDS, Users);
+
+                                    }
+                                }
+                            });//END Find USER
 
                         }
                     }); // END FIND MATCH CALL BACK
@@ -450,4 +442,30 @@ public class PublicDBHelper {
             }
         });//END GET LIST OF MATCHES CALLBACK
     }// End get matched users
+
+    public static interface removeMatchCallBack{
+        void removed(boolean b);
+    }
+    public void removeMatch(final String UID, final String ForeignUID, final removeMatchCallBack CB) {
+        this.getListofMatches(UID, new PublicDBHelper.MatchListCallback() {
+            @Override
+            public void matchIDListCallback(ArrayList<String> MatchIDs) {
+                for (String s : MatchIDs) {
+                    findMatch(s, new PublicDBHelper.findMatchCallback() {
+                        @Override
+                        public void findMatchCallback(Match m) {
+                            //check if match is correct
+                            if (m.getUserIDOne().contentEquals(ForeignUID) && m.getUserIDTwo().contentEquals(UID)) {
+                                updateMatch(ForeignUID,m.isUserOneConfirm(),UID,false,m.getMyKey(),myRef.child(PublicDBHelper.MATCH_LIST));
+                                CB.removed(true);
+                            } else if (m.getUserIDTwo().contentEquals(ForeignUID) && m.getUserIDOne().contentEquals(UID)) {
+                                updateMatch(ForeignUID,m.isUserTwoConfirm(),UID,false,m.getMyKey(),myRef.child(PublicDBHelper.MATCH_LIST));
+                                CB.removed(true);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
 }
