@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/background_image"
-        android:text="Notifications"
+        android:text="About the app:"
         android:textAppearance="@style/ThemeOverlay.MyTitleText" />
 
     <ListView

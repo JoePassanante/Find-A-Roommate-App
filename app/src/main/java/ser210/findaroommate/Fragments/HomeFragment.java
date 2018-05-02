@@ -50,12 +50,14 @@ public class HomeFragment extends Fragment {
                 }
         });
 
-
         //--TEMPORARY NOTIFICATIONS LIST--//
         _notifications = new ArrayList<String>();
-        _notifications.add("John Smith has matched you! ");
-        _notifications.add("Jimmy Neutron is looking to hang out!");
-        _notifications.add("Sally no longer wants to be your friend!");
+        _notifications.add("Creators: Joseph Passanante & Alexandra Sazhin");
+        _notifications.add("We created this app in the hope that we can help people find college" +
+                " roommates easier. The focus was simplicity and accesability. We hope this app will" +
+                " help you in your room finding!");
+        _notifications.add("Use the action bar on the top right to navigate the app!");
+        _notifications.add("Complete on 5/1/2018");
 
         //populate List View
         _notificationsList = v.findViewById(R.id.notification_list);
