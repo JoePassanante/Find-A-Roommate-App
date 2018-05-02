@@ -69,7 +69,7 @@ public class UserProfileFragment extends Fragment {
         UserID = args.getString("UID");
 
         //make sure party variable is within index
-        party = (party < 0 || party > getResources().getStringArray(R.array.PartyOptions).length) ? 0 : party;
+        party = (party < 0 || party > getResources().getStringArray(R.array.PartyOptions).length-1) ? 0 : party;
 
         _nameText.setText(name); //change to first name + " " + last name
         _housingText.setText(housing);

@@ -38,14 +38,14 @@ public class EditUserActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_user);
+        setContentView(R.layout.activity_edit_user);
         Intent intent = getIntent();
         firstName = intent.getStringExtra("first_name");
         lastName = intent.getStringExtra("last_name");
         housePref = intent.getStringExtra("housing_pref");
         phoneNum = intent.getStringExtra("phone_num");
-        descrip = intent.getStringExtra("descrip");
-        partyPref = intent.getIntExtra("party_pref", 0);
+        descrip = intent.getStringExtra("description");
+        partyPref = intent.getIntExtra("party", 0);
 
         _firstNamefield = (EditText) findViewById(R.id.field_firstname);
         _lastNamefield = (EditText) findViewById(R.id.field_lastname);
