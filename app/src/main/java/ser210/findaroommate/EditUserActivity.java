@@ -43,7 +43,7 @@ public class EditUserActivity extends Activity {
         firstName = intent.getStringExtra("first_name");
         lastName = intent.getStringExtra("last_name");
         housePref = intent.getStringExtra("housing_pref");
-        phoneNum = intent.getStringExtra("phone_num");
+        phoneNum = intent.getStringExtra("phone");
         descrip = intent.getStringExtra("description");
         partyPref = intent.getIntExtra("party", 0);
 
