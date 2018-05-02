@@ -165,9 +165,9 @@ public class HomeActivity extends Activity {
             intent.putExtra("first_name", me.getFirstName());
             intent.putExtra("last_name", me.getLastName());
             intent.putExtra("housing_pref", me.getHousingPref());
-            intent.putExtra("phone_num", me.getPhoneNumber());
-            intent.putExtra("descrip", me.getDescription());
-            intent.putExtra("party_pref", me.getPartyPreference());
+            intent.putExtra("phone", me.getPhoneNumber());
+            intent.putExtra("description", me.getDescription());
+            intent.putExtra("party", me.getPartyPreference());
             startActivity(intent);
         }
 
